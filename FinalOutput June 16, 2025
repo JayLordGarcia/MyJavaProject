@@ -1,0 +1,168 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Finaloutput {
+
+    static int total = 0;
+
+    static JLabel totalLabel = new JLabel("Current Total: ₱ 0", SwingConstants.CENTER);
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Food Vendo Machine");
+        frame.setSize(650, 800);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        JLabel welcomeLabel = new JLabel("Welcome to JAY'S Food Vendo", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        welcomeLabel.setBounds(125, 15, 400, 30);
+        panel.add(welcomeLabel);
+
+        JLabel welcomeLabel2 = new JLabel("Select your Food:", SwingConstants.CENTER);
+        welcomeLabel2.setFont(new Font("SansSerif", Font.BOLD, 14));
+        welcomeLabel2.setBounds(125, 45, 400, 30);
+        panel.add(welcomeLabel2);
+
+        String[] foods = { "Fries", "Burger", "Hotdog", "Pizza", "Siopao", "Siomai" };
+        int[] amount = { 70, 85, 25, 105, 60, 10 };
+
+        for (int i = 0; i < foods.length; i++) {
+            JButton button = new JButton(foods[i] + " - ₱ " + amount[i]);
+            button.setBounds(125, 95 + (i * 45), 400, 35);
+            button.setActionCommand(foods[i]);
+            button.addActionListener(new FoodButtonListener(frame));
+            panel.add(button);
+
+        }
+
+        JLabel drinksLabel = new JLabel("Select your Drink:", SwingConstants.CENTER);
+        drinksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        drinksLabel.setBounds(125, 95 + (foods.length * 45) + 10, 400, 30);
+        panel.add(drinksLabel);
+
+        String[] drinks = { "Water", "Iced Tea", "Cola", "Coffee" };
+        int[] drinkAmount = { 20, 30, 25, 35 };
+
+        for (int i = 0; i < drinks.length; i++) {
+            JButton drinkButton = new JButton(drinks[i] + " - ₱ " + drinkAmount[i]);
+            drinkButton.setBounds(125, 135 + (foods.length * 45) + (i * 45), 400, 35);
+            drinkButton.setActionCommand(drinks[i]);
+            drinkButton.addActionListener(new FoodButtonListener(frame));
+            panel.add(drinkButton);
+
+        }
+
+        int baseY = 135;
+        int foodButtonsHeight = foods.length * 45;
+        int drinkButtonsHeight = drinks.length * 45;
+        int spacing = 20;
+        int payBtnY = baseY + foodButtonsHeight + drinkButtonsHeight + spacing;
+
+        JButton exitBtn = new JButton("PAY");
+        exitBtn.setBounds(125, payBtnY, 150, 40);
+        exitBtn.setForeground(Color.WHITE);
+        exitBtn.setBackground(new Color(0, 123, 50));
+        panel.add(exitBtn);
+
+        JButton cancelBtn = new JButton("CANCEL");
+        cancelBtn.setBounds(325, payBtnY, 150, 40);
+        cancelBtn.setForeground(Color.WHITE);
+        cancelBtn.setBackground(new Color(220, 53, 69));
+        panel.add(cancelBtn);
+
+        totalLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        totalLabel.setBounds(125, payBtnY + 60, 400, 30);
+        panel.add(totalLabel);
+
+        exitBtn.addActionListener(new PayButtonListener(frame));
+
+        cancelBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                total = 0;
+                totalLabel.setText("Current Total: ₱ " + total);
+                JOptionPane.showMessageDialog(frame, "Selection cleared.");
+            }
+        });
+
+        frame.add(panel);
+        frame.setVisible(true);
+    }
+
+    static class FoodButtonListener implements ActionListener {
+        JFrame frame;
+
+        public FoodButtonListener(JFrame frm) {
+            frame = frm;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            handleSelection(e.getActionCommand(), frame, totalLabel);
+        }
+    }
+
+    static class PayButtonListener implements ActionListener {
+        JFrame frame;
+
+        public PayButtonListener(JFrame frm) {
+            frame = frm;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(frame, "Thank you! \nYour Total cost: ₱ " + total);
+            total = 0;
+            totalLabel.setText("Current Total: ₱ " + total);
+        }
+    }
+
+    public static void handleSelection(String item, JFrame frame, JLabel label) {
+        switch (item) {
+            case "Fries":
+                total += 70;
+                JOptionPane.showMessageDialog(frame, "You Selected Fries.");
+                break;
+            case "Burger":
+                total += 85;
+                JOptionPane.showMessageDialog(frame, "You Selected Burger.");
+                break;
+            case "Hotdog":
+                total += 25;
+                JOptionPane.showMessageDialog(frame, "You Selected Hotdog.");
+                break;
+            case "Pizza":
+                total += 105;
+                JOptionPane.showMessageDialog(frame, "You Selected Pizza.");
+                break;
+            case "Siopao":
+                total += 60;
+                JOptionPane.showMessageDialog(frame, "You Selected Siopao.");
+                break;
+            case "Siomai":
+                total += 10;
+                JOptionPane.showMessageDialog(frame, "You Selected Siomai.");
+                break;
+            case "Water":
+                total += 20;
+                JOptionPane.showMessageDialog(frame, "You Selected Water.");
+                break;
+            case "Iced Tea":
+                total += 30;
+                JOptionPane.showMessageDialog(frame, "You Selected Iced Tea.");
+                break;
+            case "Cola":
+                total += 25;
+                JOptionPane.showMessageDialog(frame, "You Selected Cola.");
+                break;
+            case "Coffee":
+                total += 35;
+                JOptionPane.showMessageDialog(frame, "You Selected Coffee.");
+                break;
+        }
+        label.setText("Current Total: ₱ " + total);
+
+    }
+}
